@@ -55,7 +55,12 @@ export default {
   name: "SemesterTable",
   components: { SemesterTableRow, SemesterHeader, SearchCourseDialog },
   props: {
-    semester: null
+    semester: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
   },
   data() {
     return {

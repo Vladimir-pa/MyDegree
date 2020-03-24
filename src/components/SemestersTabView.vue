@@ -1,9 +1,9 @@
 <template>
   <b-card class="shadow bg-white rounded" no-body style="margin: 10px 20px">
-    <b-tabs pills card @input="updateActiveSemester">
+    <b-tabs pills card nav-class="sortable" @input="updateActiveSemester">
       <b-tab
-        v-for="(semester, index) in this.$store.state.user.semesters"
-        :key="index"
+        v-for="semester in this.$store.state.user.semesters"
+        :key="semester.name"
         :title="'סמסטר ' + semester.name"
         lazy
       >
@@ -51,9 +51,6 @@
       </b-tab>
 
       <!-- New Tab Button (Using tabs slot) -->
-      <template slot="tabs-end">
-        <b-nav-item href="#" @click.prevent="newTab"><b>+</b></b-nav-item>
-      </template>
 
       <!-- Render this if no tabs -->
       <div
@@ -77,13 +74,27 @@ import AppSemesterSummary from "@/components/SemesterSummary";
 import AppSemesterTable from "@/components/SemesterTable";
 import firebase from "firebase/app";
 import "firebase/auth";
+import Sortable from "sortablejs/Sortable";
 
 export default {
   name: "SemestersTabView",
   components: { AppSemesterTable, AppSemesterSummary },
+  props: {
+    semesters: {
+      type: Array,
+      default() {
+        return {};
+      }
+    },
+    sliceSemesters: {
+      type: Function,
+      default() {
+        return {};
+      }
+    }
+  },
   data() {
     return {
-      semesters: [],
       tabCounter: 1
     };
   },
@@ -106,6 +117,13 @@ export default {
         }
       }
     }
+    let el = document.querySelector(".sortable");
+    Sortable.create(el, {
+      animation: 200,
+      swapThreshold: 0.5,
+      direction: "horizontal",
+      onEnd: this.onEnd
+    });
   },
   methods: {
     closeTab() {
@@ -143,6 +161,9 @@ export default {
     updateActiveSemester(tab_index) {
       this.$store.commit("changeSemesterTo", tab_index);
       this.$store.commit("reCalcCurrentSemester");
+    },
+    onEnd(evt) {
+      this.sliceSemesters(evt);
     }
   }
 };

@@ -7,8 +7,8 @@
         class="form-control courseType"
         @change.stop="updateField('type')"
       >
-        <template v-for="(type, index) in course_types">
-          <option :key="index" :value="index">{{ type.name }} </option>
+        <template v-for="(type, index_2) in course_types">
+          <option :key="index_2" :value="index_2">{{ type.name }} </option>
         </template>
       </select>
     </td>

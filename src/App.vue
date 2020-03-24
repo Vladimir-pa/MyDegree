@@ -5,7 +5,11 @@
   >
     <header-nav-bar />
     <div class="container-fluid">
-      <semesters-tab-view style="margin: 5px" />
+      <semesters-tab-view
+        style="margin: 5px"
+        :slice-semesters="slice_semesters"
+        :semesters="semesters"
+      />
       <degree-summary />
       <dp-footer />
     </div>
@@ -17,14 +21,34 @@ import SemestersTabView from "./components/SemestersTabView";
 import HeaderNavBar from "./components/Header";
 import DpFooter from "./components/Footer";
 import DegreeSummary from "./components/DegreeSummary";
-
 export default {
-  name: "app",
+  name: "App",
   components: {
     DegreeSummary,
     DpFooter,
     HeaderNavBar,
     SemestersTabView
+  },
+  data() {
+    return {
+      semesters: this.$store.state.user.semesters
+    };
+  },
+  methods: {
+    slice_semesters(evt) {
+      //We subtract 1 because the first item is always el-tabs__active-bar
+      let oldIndex = evt.oldIndex;
+      let newIndex = evt.newIndex;
+      window.console.log(oldIndex + " " + newIndex);
+      //Update the tabs array to reflect the change that was just made
+      this.$store.state.user.semesters.splice(
+        newIndex,
+        0,
+        this.$store.state.user.semesters.splice(oldIndex, 1)[0]
+      );
+      this.$store.commit("reCalcCurrentSemester");
+      //Update the activeName to the item that was just moved
+    }
   }
 };
 </script>

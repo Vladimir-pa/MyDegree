@@ -74,6 +74,7 @@ function resetRemovedCategory(state, category_id) {
 }
 
 function renameSemesters(semesters) {
+  window.console.log(semesters);
   if (!semesters || semesters.length < 0) {
     return;
   }
@@ -85,6 +86,7 @@ function renameSemesters(semesters) {
       semesters[i].name = 1 + i - summer_semesters;
     }
   }
+  window.console.log(semesters);
 }
 
 function getSummerSemestersNumber(semesters) {
@@ -311,6 +313,9 @@ export const store = new Vuex.Store({
         fieldName
       );
     },
+    renameSemesters: state => {
+      renameSemesters(state.user.semesters);
+    },
     addCourse: state => {
       Semester.addCourseToSemester(
         state.user.semesters[state.user.active_semester]
@@ -442,6 +447,7 @@ export const store = new Vuex.Store({
     reCalcCurrentSemester: state => {
       if (state.user.semesters.length > 0) {
         calculateUserInfo(state);
+        renameSemesters(state.user.semesters);
       }
     },
     checkForValidVersion: state => {

@@ -70,6 +70,6 @@
 
 <script>
 export default {
-  name: "semester-summary"
+  name: "SemesterSummary"
 };
 </script>
